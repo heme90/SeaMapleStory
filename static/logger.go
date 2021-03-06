@@ -1,25 +1,42 @@
 package static
 
+import (
+	"flag"
+	"github.com/google/logger"
+	"log"
+)
+
+var serviceLogger *logger.Logger
+
 type ServiceLogger struct {
-
+	logger *logger.Logger
 }
 
-func (s *ServiceLogger) Logf(msg string, i ...interface{}) {
-	panic("implement me")
+func InitLogger() {
+	ver := flag.Bool("MRNG",false ,"use strict, only Error for Error")
+	//TODO if need, add log file by OS.OpenFIle
+	logger.SetFlags(log.LstdFlags)
+	serviceLogger = logger.Init("MRNG LOGGER",*ver,true,nil)
 }
 
-func (s *ServiceLogger) Log() bool {
-	panic("implement me")
+func NewLogger() *ServiceLogger {
+	return &ServiceLogger{logger: serviceLogger}
 }
 
-func (s *ServiceLogger) Fatalf(pos interface{}, msg string, args ...interface{}) {
-	panic("implement me")
+//common logging
+func (l *ServiceLogger) Info(function, msg string) {
+	l.logger.Info("FUNC %s : %s",function, msg)
 }
 
-func (s *ServiceLogger) Warnl(pos interface{}, fmt_ string, args ...interface{}) {
-	panic("implement me")
+//logging For None Error case Warn
+func (l *ServiceLogger) Warn(function, msg string) {
+	l.logger.Warning("FUNC %s : %s",function, msg)
 }
-
-func (s *ServiceLogger) Debug_checknil() bool {
-	panic("implement me")
+//logging When something critical
+func (l *ServiceLogger) Error(function, msg string) {
+	l.logger.Error("FUNC %s : %s",function, msg)
+}
+//logging for panic, ... or thing may happens service down
+func (l *ServiceLogger) Fatal(function, msg string) {
+	l.logger.Fatal("FUNC %s : %s",function, msg)
 }
