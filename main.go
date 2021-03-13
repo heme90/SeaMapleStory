@@ -13,9 +13,9 @@ func init() {
 
 func main() {
 	serverHandler := http.NewServeMux()
-
 	server := &http.Server{
 		Addr:              "localhost:5000",
+		//protocol.InitRouter 함수에서 라우팅 테이블 초기화
 		Handler:           protocol.InitRouter(serverHandler),
 	}
 	//TODO add Error Handling
